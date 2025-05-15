@@ -94,7 +94,7 @@ export default function PostViewModal({
 
     try {
       const uid = nanoid(8); // short unique id
-      const shareUrl = `${window.location.origin}/${post.slug}?s=${uid}`;
+      const shareUrl = `${window.location.origin}/${window.location.pathname}?s=${uid}`;
 
       // Copy to clipboard
       await navigator.clipboard.writeText(shareUrl);
