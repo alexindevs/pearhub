@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import FeedCard from '@/components/Feed/FeedCard';
 import { FeedItem, submitInteraction } from '@/lib/api/feed.client';
+import { getBusinessMeta } from '@/lib/api/business.client';
 import { useParams } from 'next/navigation';
 import { useFeed } from '@/hooks/use-feed';
 import { withAuthGuard } from '@/app/guards/withAuthGuard';
@@ -11,6 +12,7 @@ function FeedPage() {
   const { slug } = useParams();
   const [page, setPage] = useState(1);
   const [allPosts, setAllPosts] = useState<FeedItem[]>([]);
+  const [businessMeta, setBusinessMeta] = useState<any>(null);
   const [viewed, setViewed] = useState<Set<string>>(new Set());
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
@@ -20,6 +22,18 @@ function FeedPage() {
     9
   );
 
+  // Fetch business meta data
+  useEffect(() => {
+    if (typeof slug === 'string') {
+      getBusinessMeta(slug)
+        .then((meta) => {
+          setBusinessMeta(meta);
+        })
+        .catch((err) => {
+          console.error('Failed to fetch business meta:', err);
+        });
+    }
+  }, [slug]);
   // Calculate hasMore more accurately
   const hasMore = pagination ? page < pagination.totalPages : false;
 
@@ -134,7 +148,16 @@ function FeedPage() {
 
   return (
     <section className="px-4 md:px-12 py-8">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">{renderContent()}</div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {businessMeta && (
+          <div className="flex flex-col items-start mb-6 space-y-2">
+            {/* add logo somewhere here later */}
+            <h1 className="text-2xl font-semibold">{businessMeta.name}</h1>
+            <p className="text-muted-foreground">@{businessMeta.slug}</p>
+          </div>
+        )}
+        {renderContent()}
+      </div>
 
       {hasMore && (
         <div

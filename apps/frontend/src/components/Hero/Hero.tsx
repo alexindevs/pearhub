@@ -19,10 +19,10 @@ export const Hero = () => {
         engagement.
       </p>
       <div className="mt-7 flex gap-4">
-        <Link href="/auth/login">
+        <Link href="/login">
           <Button variant="ghost">Login</Button>
         </Link>
-        <Link href="/auth/signup">
+        <Link href="/signup">
           <Button>Sign Up</Button>
         </Link>
       </div>

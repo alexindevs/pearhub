@@ -1,117 +1,160 @@
 # 🍐 PearHub
 
-**PearHub** is a backend-powered SaaS platform that enables businesses to publish content and engage members through personalized feeds, tracked interactions, and detailed analytics. Built for scalability and smart engagement, it blends RESTful API structure with AI-lite ranking logic, ready for future evolution into a full-fledged recommendation engine.
+**PearHub** is a fullstack SaaS platform that enables businesses to publish content and engage members through personalized feeds, tracked interactions, and detailed analytics. Built to scale, PearHub blends clean API architecture with real-time content intelligence.
 
 ---
 
-## 🔗 Live Documentation
+## 🔗 Live Links
 
-- 📘 **API Docs:** [https://pearhub.mooo.com/docs](https://pearhub.mooo.com/docs)
-- 🗂 **Database Schema (DBML):** [View on dbdocs.io](https://dbdocs.io/alexindevs/PearHub-Pearmonie-Assessment)
+* 🔧 **Backend Docs:** [https://pearhub.mooo.com/docs](https://pearhub.mooo.com/docs)
+* 🖼 **Frontend App:** [https://pearhub-frontend.vercel.app](https://pearhub-frontend.vercel.app)
+* 🧠 **DB Schema:** [https://dbdocs.io/alexindevs/PearHub-Pearmonie-Assessment](https://dbdocs.io/alexindevs/PearHub-Pearmonie-Assessment)
 
 ---
 
 ## 🛠 Tech Stack
 
-- **Node.js** + **Express**
-- **Prisma ORM** + **PostgreSQL**
-- **JWT Auth** with Role-based Access Control
-- **Zod** for schema validation
-- **Swagger** for API documentation
-- **Docker-ready** via InfraBuddy
+### Backend
+
+* **Node.js** + **Express**
+* **Prisma ORM** + **PostgreSQL**
+* **Zod** for schema validation
+* **JWT Auth** with Role-based Access
+* **Swagger UI** for documentation
+* **Docker-ready** via InfraBuddy
+
+### Frontend
+
+* **Next.js 14 (App Router)**
+* **TailwindCSS**
+* **ShadCN/UI** component system
+* **React Context API** for auth state
+* **Zustand** (optional integration ready)
+* **Sonner** for notifications
 
 ---
 
-## 📦 Features
+## ✨ Features
 
-- 🧾 **Authentication** (MEMBER / BUSINESS roles)
-- 🏢 **Business & User Management**
-- ✍️ **Content Publishing** (Text, Image, Link, Longform)
-- 💬 **User Interactions** (View, Like, Comment, Share, Dislike)
-- 🧠 **Smart Feed Module** (Personalized content ranking per business)
-- 📈 **Analytics** (Memberships, Engagement, Trends)
-- 🔐 **RBAC Middleware**
-- 🧪 Fully Validated with Zod
-- 🔍 Swagger UI for testing
+### 🔐 Auth
+
+* Role-based accounts: MEMBER or BUSINESS
+* Signup, Login, Persistent Sessions
+
+### 🏢 Business Module
+
+* Business profile creation and updates
+* Owner dashboard with analytics and content tools
+
+### ✍️ Content Publishing
+
+* Supports 4 types: TEXT, IMAGE, LINK, LONGFORM
+* Markdown formatting for longform content
+* Image uploads via Cloudinary
+
+### 🧠 Feed Engine
+
+* Personalized ranking per user, per business
+* View, Like, Comment, Share, Click interactions
+* Interaction-based relevance scoring
+
+### 📈 Analytics Module
+
+* Membership growth over time
+* Top-performing content
+* Engagement trend breakdowns
+* Average interactions per content type
+* Content type distribution
+* Total and active members
+
+### 🔮 Roadmap
+
+* AI embeddings and vector search
+* Social sharing previews with meta tags
+* Pagination and search for business content
+* Member-side interaction dashboard
 
 ---
 
-## 🧠 Recommendation Engine (AI Logic)
+## 📦 Backend API Overview
 
-The feed engine currently uses a **hybrid ranking system** that blends user-specific preferences with content popularity. This allows every user to see *all content from a business* ranked by relevance, rather than filtered.
+| Module       | Base Route      |
+| ------------ | --------------- |
+| Auth         | `/auth`         |
+| Business     | `/business`     |
+| Content      | `/content`      |
+| Interactions | `/interactions` |
+| Memberships  | `/memberships`  |
+| Feed         | `/feed`         |
+| Analytics    | `/analytics`    |
 
-### 🎯 Current Scoring Strategy
+---
 
-If a user has no prior interactions (cold start), content is ranked by popularity and interaction:
+## ⚡️ Feed Intelligence
+
+The ranking system uses:
+
+### 1. Popularity Scoring (cold start)
 
 ```ts
 score = views * 0.5 + likes * 1.5 + comments * 1.0 + shares * 2.0
-````
+```
 
-If a user has interaction history, the engine:
-
-1. Builds a **tag affinity vector** from past likes/comments/shares
-2. Scores content based on **tag overlap**
-3. Applies a **freshness boost** (decays over time)
-4. Applies a **penalty** for content the user has already viewed
+### 2. Personalized Ranking (active users)
 
 ```ts
-finalScore = tagScore + popularityScore + freshnessBoost - viewedPenalty
+finalScore = tagAffinity + popularity + freshnessBoost - viewedPenalty
 ```
 
-This ensures every user sees the most engaging, contextually relevant content with recency and novelty baked in.
+* **Tag Affinity:** Based on tags of liked/commented content
+* **Freshness:** Time-decay scoring
+* **Penalty:** For previously viewed content
+
+### 🚀 Future: Embeddings
+
+* Content will be embedded using `text-embedding-ada`
+* Each user will have a taste vector
+* Content will be ranked using cosine similarity
 
 ---
 
-### 🔮 Future Improvement Plan: Vector Embedding & Semantic Similarity
+## 📮 Setup Instructions
 
-PearHub’s AI logic is designed to evolve. In future versions, we plan to replace tag-based ranking with **semantic vector embeddings**, allowing much smarter, ML-powered feed personalization.
-
-#### 🧬 How it will work
-
-- Each piece of content (title, tags, description) will be embedded using a model like OpenAI’s `text-embedding-ada`
-- Each user’s interaction history will form a **“taste vector”**
-- Content will be scored using **cosine similarity** between vectors
-- Resulting in deep contextual matching between **users and content**, far beyond exact tag overlap
-
-This system will unlock:
-
-- 🧠 Smarter recommendations
-- 📈 Better scaling as data grows
-- 🧬 ML/AI-integrated personalization
-
----
-
-## 🚀 Setup Instructions
-
-### 1. Clone the Repo
+### 1. Clone the Monorepo
 
 ```bash
-git clone https://github.com/alexindevs/pearhub-backend.git
-cd pearhub-backend
+git clone https://github.com/alexindevs/pearhub-monorepo.git
+cd pearhub-monorepo
 ```
 
-### 2. Install Dependencies
+### 2. Install Both Projects
 
 ```bash
-npm install
+cd pearhub-backend && npm install
+cd ../pearhub-frontend && npm install
 ```
 
-### 3. Create `.env` File
+### 3. Backend Setup
+
+* Create `.env`
 
 ```env
-DATABASE_URL=postgresql://youruser:yourpass@localhost:5432/pearhub
-JWT_SECRET=your_secret_key
+DATABASE_URL=postgresql://user:pass@localhost:5432/pearhub
+JWT_SECRET=your_secret
 ```
 
-### 4. Run Prisma Migrations
+* Migrate and start dev
 
 ```bash
 npx prisma generate
 npx prisma migrate dev --name init
+npm run dev
 ```
 
-### 5. Start the Dev Server
+### 4. Frontend Setup
+
+* Set up `.env.local` if needed (optional)
+* Start frontend
 
 ```bash
 npm run dev
@@ -119,26 +162,12 @@ npm run dev
 
 ---
 
-## 📮 API Entry Points
-
-| Module         | Base Route            |
-| -------------- | --------------------- |
-| Auth           | `/auth`               |
-| Business       | `/business`           |
-| Content        | `/content`            |
-| Interactions   | `/interactions`       |
-| Memberships    | `/memberships`        |
-| Feed           | `/feed`               |
-| Analytics      | `/analytics`          |
-
----
-
 ## 👩🏾‍💻 Author
 
-Built by [@alexindevs](https://github.com/alexindevs) for the Pearmonie technical assessment, but also as a real, shippable product engine.
+Built by [@alexindevs](https://github.com/alexindevs) for the Pearmonie technical assessment, but designed to be a real, scalable creator platform.
 
 ---
 
 ## 📝 License
 
-MIT: Use it, fork it, build on it 🍐
+MIT: Fork it, remix it, ship it 🍐
