@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useMembership } from '@/hooks/use-membership';
 import { useRouter } from 'next/navigation';
 import { withAuthGuard } from '@/app/guards/withAuthGuard';
+import { Button } from '@/components/ui/button';
 
 function SubscriptionPage() {
   const { memberships, potential, loading, join, leave } = useMembership();
@@ -64,12 +65,13 @@ function SubscriptionPage() {
                             New post
                           </span>
                         )}
-                        <button
+                        <Button
+                          variant="link"
                           onClick={() => leave(membership.id)}
                           className="text-xs text-red-600 hover:underline ml-auto"
                         >
                           Unsubscribe
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   );
@@ -106,12 +108,13 @@ function SubscriptionPage() {
                           </p>
                         </div>
                       </div>
-                      <button
+                      <Button
+                        variant="link"
                         onClick={() => join(biz.id).then(() => router.push(`/${biz.slug}`))}
                         className="mt-auto text-sm font-medium text-primary hover:underline"
                       >
                         Subscribe
-                      </button>
+                      </Button>
                     </div>
                   ))}
                 </div>
