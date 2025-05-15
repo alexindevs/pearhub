@@ -67,14 +67,14 @@ export default function LoginPage() {
           <strong>Demo Accounts:</strong>
           <ul className="mt-2 list-disc list-inside">
             <li>
-              <strong>Business:</strong> business@example.com
+              <strong>Business:</strong> ceo@pearhub.io
             </li>
             <li>
-              <strong>Member:</strong> member@example.com
+              <strong>Member:</strong> jonathan@example.com
             </li>
           </ul>
           <p className="mt-1">
-            Password for both: <code>password</code>
+            Password for both: <code>supersecure123</code>
           </p>
         </div>
 
