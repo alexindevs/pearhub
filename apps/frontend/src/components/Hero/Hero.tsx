@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export const Hero = () => {
+export const Hero = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-12 md:p-24 text-center relative text-white">
       <div className="absolute inset-0 -z-4">
@@ -19,12 +19,28 @@ export const Hero = () => {
         engagement.
       </p>
       <div className="mt-7 flex gap-4">
-        <Link href="/login">
+        {/* <Link href="/login">
           <Button variant="ghost">Login</Button>
         </Link>
         <Link href="/signup">
           <Button>Sign Up</Button>
-        </Link>
+        </Link> */}
+        { !isLoggedIn && (
+          <>
+            <Link href="/login">
+              <Button variant="ghost">Login</Button>
+            </Link>
+            <Link href="/signup">
+              <Button>Sign Up</Button>
+            </Link>
+          </>
+        )}
+
+        { isLoggedIn && (
+          <Link href="/dashboard">
+            <Button>Go to Dashboard</Button>
+          </Link>
+        )}
       </div>
     </div>
   );

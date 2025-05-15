@@ -1,12 +1,18 @@
+'use client';
+
 import { Hero } from '@/components/Hero/Hero';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Home() {
+  const { authState } = useAuth();
+  const isLoggedIn = authState.isAuthenticated;
+
   return (
     <main>
-      <Hero></Hero>
+      <Hero isLoggedIn={isLoggedIn}></Hero>
       <div className="py-12 bg-background text-black">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl font-semibold text-center mb-4">About PearHub</h2>
@@ -119,7 +125,7 @@ export default function Home() {
             Join PearHub today and start connecting with businesses or building your audience.
           </p>
           <Link href="/signup">
-            <Button className="mt-6">Sign Up Now</Button>
+            <Button className="mt-6">{isLoggedIn ? "Go to Dashboard" : "Sign Up Now"}</Button>
           </Link>
         </div>
       </section>
