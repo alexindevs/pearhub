@@ -11,19 +11,19 @@ export const withAuthGuard = (Component: React.FC) => {
     const pathname = usePathname();
 
     useEffect(() => {
-      if (authState.isLoading) return;
-
       const businessRoutes = ['/dashboard', '/dashboard/analytics'];
       const memberRoutes = ['/subscriptions'];
 
       const isBusinessRoute = businessRoutes.includes(pathname);
       const isMemberRoute =
-        memberRoutes.includes(pathname) || /^\/[^/]+$/.test(pathname); // /[slug] pattern
+        memberRoutes.includes(pathname);
 
       if (!authState.isAuthenticated) {
         router.push('/login');
         return;
       }
+
+      console.log(isMemberRoute, isMember(), isMemberRoute && !isMember());
 
       if (isBusinessRoute && !isBusinessOwner()) {
         router.replace('/forbidden');
