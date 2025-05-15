@@ -114,7 +114,7 @@ export default function PostViewModal({
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent
-        className="max-w-3xl overflow-y-scroll scrollbar-hide max-h-screen p-6"
+        className="max-w-screen md:max-w-3xl overflow-y-scroll scrollbar-hide max-h-screen p-6"
         aria-describedby={
           post?.description ? 'post-description' : (undefined as string | undefined)
         }
@@ -156,7 +156,7 @@ export default function PostViewModal({
             {post.type === 'TEXT' && <p>{post.body}</p>}
 
             {post.type === 'LINK' && (
-              <div className="block bg-muted p-4 rounded-md hover:bg-muted/70 transition overflow-ellipsis">
+              <div className="block bg-muted p-4 rounded-md hover:bg-muted/70 transition overflow-y-scroll scrollbar-hide">
                 <a
                   href={post.body}
                   target="_blank"
