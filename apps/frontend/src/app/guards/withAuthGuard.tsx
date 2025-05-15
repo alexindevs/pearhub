@@ -23,8 +23,6 @@ export const withAuthGuard = (Component: React.FC) => {
         return;
       }
 
-      console.log(isMemberRoute, isMember(), isMemberRoute && !isMember());
-
       if (isBusinessRoute && !isBusinessOwner()) {
         router.replace('/forbidden');
       } else if (isMemberRoute && !isMember()) {
