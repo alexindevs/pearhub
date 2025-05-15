@@ -18,7 +18,11 @@ export const withAuthGuard = (Component: React.FC) => {
       const isMemberRoute = memberRoutes.includes(pathname);
 
       if (!authState.isAuthenticated) {
-        router.push('/login');
+        setTimeout(() => {
+          if (!authState.isLoading && !authState.isAuthenticated) {
+          router.push('/login');
+          }
+        }, 5000);
         return;
       }
 
