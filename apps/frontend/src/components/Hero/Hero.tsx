@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export const Hero = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
+export const Hero = ({ isLoggedIn, isBusinessOwner }: { isLoggedIn: boolean, isBusinessOwner: boolean }) => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-12 md:p-24 text-center relative text-white">
       <div className="absolute inset-0 -z-4">
@@ -37,8 +37,8 @@ export const Hero = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
         )}
 
         { isLoggedIn && (
-          <Link href="/dashboard">
-            <Button>Go to Dashboard</Button>
+          <Link href={isBusinessOwner ? "/dashboard" : "/subscriptions"}>
+            <Button>Go to {isBusinessOwner ? "Dashboard" : "Subscriptions"}</Button>
           </Link>
         )}
       </div>

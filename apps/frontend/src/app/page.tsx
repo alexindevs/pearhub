@@ -7,12 +7,13 @@ import Link from 'next/link';
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function Home() {
-  const { authState } = useAuth();
+  const { authState, isBusinessOwner } = useAuth();
   const isLoggedIn = authState.isAuthenticated;
+  
 
   return (
     <main>
-      <Hero isLoggedIn={isLoggedIn}></Hero>
+      <Hero isLoggedIn={isLoggedIn} isBusinessOwner={isBusinessOwner()}></Hero>
       <div className="py-12 bg-background text-black">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl font-semibold text-center mb-4">About PearHub</h2>
@@ -124,8 +125,8 @@ export default function Home() {
           <p className="text-white text-lg max-w-xl">
             Join PearHub today and start connecting with businesses or building your audience.
           </p>
-          <Link href="/signup">
-            <Button className="mt-6">{isLoggedIn ? "Go to Dashboard" : "Sign Up Now"}</Button>
+          <Link href={!isLoggedIn ? "/signup" : isBusinessOwner() ? "/dashboard" : "/subscriptions" } className="mt-6">
+            <Button className="mt-6">{!isLoggedIn ? "Sign up now" : isBusinessOwner() ? "Go to Dashboard" : "Go to Dubscriptions"}</Button>
           </Link>
         </div>
       </section>
