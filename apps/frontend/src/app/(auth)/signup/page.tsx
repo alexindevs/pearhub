@@ -206,6 +206,7 @@ export default function SignupPage() {
                   ref={fileInputRef}
                   accept="image/*"
                   onChange={handleFileChange}
+                  required
                   // className="hidden"
                 />
                 <Button
