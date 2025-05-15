@@ -15,8 +15,7 @@ export const withAuthGuard = (Component: React.FC) => {
       const memberRoutes = ['/subscriptions'];
 
       const isBusinessRoute = businessRoutes.includes(pathname);
-      const isMemberRoute =
-        memberRoutes.includes(pathname);
+      const isMemberRoute = memberRoutes.includes(pathname);
 
       if (!authState.isAuthenticated) {
         router.push('/login');

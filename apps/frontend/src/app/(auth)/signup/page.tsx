@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { SignupInput, useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { toast } from 'sonner';
 
 export default function SignupPage() {
   const [accountType, setAccountType] = useState<'member' | 'business'>('business');
@@ -26,6 +27,7 @@ export default function SignupPage() {
     businessName: '',
     avatarUrl: '',
   });
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   useEffect(() => {
     setForm((prev) => ({
@@ -82,6 +84,12 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
+      if (form.password !== confirmPassword) {
+        toast.error('Passwords do not match');
+        setLoading(false);
+        return;
+      }
+
       let avatarUrl = form.avatarUrl;
 
       // Upload image if there's a preview
@@ -169,6 +177,19 @@ export default function SignupPage() {
               placeholder="••••••••"
               value={form.password}
               onChange={handleChange}
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="confirmPassword" className="mb-3">
+              Confirm Password
+            </Label>
+            <Input
+              id="confirmPassword"
+              type="password"
+              placeholder="••••••••"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </div>
 

@@ -72,4 +72,3 @@ function AnalyticsPage() {
 }
 
 export default withAuthGuard(AnalyticsPage);
-
