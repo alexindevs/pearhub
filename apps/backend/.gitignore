@@ -1,0 +1,5 @@
+node_modules
+# Keep environment varibles out of version control
+.env
+generated
+dist
