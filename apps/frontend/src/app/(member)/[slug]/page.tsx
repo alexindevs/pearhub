@@ -150,7 +150,7 @@ function FeedPage() {
     <section className="px-4 md:px-12 py-8">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {businessMeta && (
-          <div className="flex flex-col items-start mb-6 space-y-2">
+          <div className="flex flex-col mb-6 space-y-2">
             {/* add logo somewhere here later */}
             <h1 className="text-2xl font-semibold">{businessMeta.name}</h1>
             <p className="text-muted-foreground">@{businessMeta.slug}</p>
