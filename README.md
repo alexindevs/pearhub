@@ -26,7 +26,6 @@ Built to scale, PearHub blends a clean REST API, a modern Next.js frontend, and 
 | **Frontend**  | **Next.js 14** (App Router) · TypeScript | CSR/SSR mix                         |
 |               | TailwindCSS · ShadCN/UI                  | Design system                       |
 |               | React Context API                        | Auth state                          |
-|               | Zustand *(optional)*                     | Global store ready                  |
 | **AI Engine** | **Python 3.12 + FastAPI**                | Stateless recommender micro‑service |
 |               | OpenAI `text‑embedding‑ada‑002`          | Content & taste vectors             |
 |               | NumPy                                    | Cosine similarity maths             |
