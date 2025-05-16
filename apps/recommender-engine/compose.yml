@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  ranker:
+    build: .
+    ports:
+      - "9000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    networks:
+      - pearnet
+
+networks:
+  pearnet:
+    name: pearnet
+    driver: bridge
+    external: true

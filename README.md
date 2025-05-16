@@ -72,7 +72,6 @@
 * AI embeddings and vector search
 * Social sharing previews with meta tags
 * Pagination and search for business content
-* Member-side interaction dashboard
 
 ---
 
@@ -164,7 +163,7 @@ npm run dev
 
 ## 👩🏾‍💻 Author
 
-Built by [@alexindevs](https://github.com/alexindevs) for the Pearmonie technical assessment, but designed to be a real, scalable creator platform.
+Built by [@alexindevs](https://github.com/alexindevs) for the Pearmonie technical assessment.
 
 ---
 

@@ -1,9 +1,12 @@
+import { Interaction } from "../../generated/prisma";
 import { ContentWithMetrics, FeedRepository } from "../repositories/feed.repository";
 
 interface RankedContent {
   content_id: string;
   score: number;
 }
+
+const RANKER_URL = process.env.RANKER_URL || 'http://localhost:9000';
 
 export class FeedService {
   private repository: FeedRepository;
@@ -44,77 +47,112 @@ export class FeedService {
   //   return this.calculateContentRanking(contentList, interactionList, page, limit);
   // }
 
-  private calculateContentRanking(
-    contentList: ContentWithMetrics[],
-    interactionList: any[],
-    page?: number,
-    limit?: number
-  ): RankedContent[] {
-    const interactionMap: Record<string, any> = {};
-    interactionList.forEach(i => {
-      interactionMap[i.content_id] = i;
-    });
-  
-    const feedbackWeights = {
-      liked: 3,
-      shared: 5,
-      commented: 2,
-      viewed: 1
+  private async callRanker(userId: string, businessId: string, contentList: ContentWithMetrics[], interactionList: Interaction[]): Promise<RankedContent[]> {
+    const payload = {
+      user_id: userId,
+      business_id: businessId,
+      limit: contentList.length,
+      content: contentList.map(c => ({
+        id: c.id,
+        title: c.title,
+        description: c.description,
+        body: c.body,
+        tags: c.tags,
+        created_at: c.createdAt?.toISOString?.() || new Date(c.createdAt).toISOString()
+      })),
+      interactions: interactionList.map(i => ({
+        content_id: i.contentId,
+        type: i.type,
+        timestamp: Math.floor(new Date(i.createdAt).getTime() / 1000)
+      }))
     };
   
-    const tagAffinity: Record<string, number> = {};
-  
-    contentList.forEach(content => {
-      const interaction = interactionMap[content.id];
-      if (!interaction) return;
-  
-      let score = 0;
-      for (const [type, weight] of Object.entries(feedbackWeights)) {
-        if (interaction[type]) score += weight;
-      }
-  
-      content.tags.forEach(tag => {
-        tagAffinity[tag] = (tagAffinity[tag] || 0) + score;
-      });
+    const res = await fetch(`${RANKER_URL}/rank`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
     });
   
-    const ranked: RankedContent[] = [];
-  
-    contentList.forEach(content => {
-      const tagScore = content.tags.reduce((sum, tag) => sum + (tagAffinity[tag] || 0), 0);
-  
-      const popularityScore =
-        (content.likes || 0) * 1.5 +
-        (content.comments || 0) * 1.0 +
-        (content.shares || 0) * 2.0 +
-        (content.views || 0) * 0.5;
-  
-      const hoursSinceCreation =
-        (Date.now() - new Date(content.createdAt).getTime()) / (1000 * 60 * 60);
-      const freshnessBoost = Math.max(0, 10 - hoursSinceCreation * 0.1);
-  
-      const viewedPenalty = interactionMap[content.id]?.viewed ? 5 : 0;
-  
-      const finalScore =
-        (tagScore > 0 ? tagScore : popularityScore) +
-        freshnessBoost -
-        viewedPenalty;
-  
-      ranked.push({
-        content_id: content.id,
-        score: finalScore
-      });
-    });
-  
-    ranked.sort((a, b) => b.score - a.score);
-    
-    if (page !== undefined && limit !== undefined) {
-      const startIndex = (page - 1) * limit;
-      return ranked.slice(startIndex, startIndex + limit);
+    if (!res.ok) {
+      console.error(await res.text());
+      throw new Error(`Failed to rank content via ranker: ${res.statusText}`);
     }
-    
+  
+    const ranked: { content_id: string; score: number }[] = await res.json() as RankedContent[];
     return ranked;
   }
+
+  // private calculateContentRanking(
+  //   contentList: ContentWithMetrics[],
+  //   interactionList: any[],
+  //   page?: number,
+  //   limit?: number
+  // ): RankedContent[] {
+  //   const interactionMap: Record<string, any> = {};
+  //   interactionList.forEach(i => {
+  //     interactionMap[i.content_id] = i;
+  //   });
+  
+  //   const feedbackWeights = {
+  //     liked: 3,
+  //     shared: 5,
+  //     commented: 2,
+  //     viewed: 1
+  //   };
+  
+  //   const tagAffinity: Record<string, number> = {};
+  
+  //   contentList.forEach(content => {
+  //     const interaction = interactionMap[content.id];
+  //     if (!interaction) return;
+  
+  //     let score = 0;
+  //     for (const [type, weight] of Object.entries(feedbackWeights)) {
+  //       if (interaction[type]) score += weight;
+  //     }
+  
+  //     content.tags.forEach(tag => {
+  //       tagAffinity[tag] = (tagAffinity[tag] || 0) + score;
+  //     });
+  //   });
+  
+  //   const ranked: RankedContent[] = [];
+  
+  //   contentList.forEach(content => {
+  //     const tagScore = content.tags.reduce((sum, tag) => sum + (tagAffinity[tag] || 0), 0);
+  
+  //     const popularityScore =
+  //       (content.likes || 0) * 1.5 +
+  //       (content.comments || 0) * 1.0 +
+  //       (content.shares || 0) * 2.0 +
+  //       (content.views || 0) * 0.5;
+  
+  //     const hoursSinceCreation =
+  //       (Date.now() - new Date(content.createdAt).getTime()) / (1000 * 60 * 60);
+  //     const freshnessBoost = Math.max(0, 10 - hoursSinceCreation * 0.1);
+  
+  //     const viewedPenalty = interactionMap[content.id]?.viewed ? 5 : 0;
+  
+  //     const finalScore =
+  //       (tagScore > 0 ? tagScore : popularityScore) +
+  //       freshnessBoost -
+  //       viewedPenalty;
+  
+  //     ranked.push({
+  //       content_id: content.id,
+  //       score: finalScore
+  //     });
+  //   });
+  
+  //   ranked.sort((a, b) => b.score - a.score);
+    
+  //   if (page !== undefined && limit !== undefined) {
+  //     const startIndex = (page - 1) * limit;
+  //     return ranked.slice(startIndex, startIndex + limit);
+  //   }
+    
+  //   return ranked;
+  // }
 
   async getContentDetails(contentId: string, userId: string): Promise<any> {
     const content = await this.repository.getContentById(contentId);
@@ -192,15 +230,16 @@ export class FeedService {
 
     const contentList = await this.repository.enrichContentWithMetrics(rawContents, interactions);
 
-    const interactionList = interactions.map(i => ({
-      content_id: i.contentId,
-      liked: i.type === 'LIKE',
-      commented: i.type === 'COMMENT',
-      shared: i.type === 'SHARE',
-      viewed: i.type === 'VIEW'
-    }));
+    // const interactionList = interactions.map(i => ({
+    //   content_id: i.contentId,
+    //   liked: i.type === 'LIKE',
+    //   commented: i.type === 'COMMENT',
+    //   shared: i.type === 'SHARE',
+    //   viewed: i.type === 'VIEW'
+    // }));
 
-    const allRankings = this.calculateContentRanking(contentList, interactionList);
+    const allRankings = await this.callRanker(userId, businessId, contentList, interactions);
+
     
     const total = allRankings.length;
     const totalPages = Math.ceil(total / limit);
