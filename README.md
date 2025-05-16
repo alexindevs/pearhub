@@ -200,31 +200,9 @@ NestJS backend reads the ranker URL from `RANKER_URL` in `.env`.
 * Inside Docker: `http://ranker:8000`
 * Local dev: `http://localhost:9000`
 
-## ⚡️ Architectural Schematic
-
-<!-- ```mermaid
-graph TD
-  subgraph Backend
-    A[NestJS API]
-    B[PostgreSQL]
-  end
-  subgraph AI
-    C[FastAPI Ranker]
-  end
-  A -- REST /rank --> C
-  A -- Prisma --> B
-  C -. returns IDs .-> A
-
-``` -->
-
 ---
 
 ## 👩🏾‍💻 Author
 
 Built by [**@alexindevs**](https://github.com/alexindevs) for the [**Pearmonie Technical Assessment**](https://pearmonie.com), but architected to be a production‑ready creator platform. 🍐✨
 
----
-
-## 📝 License
-
-MIT – fork it, remix it, ship it.
