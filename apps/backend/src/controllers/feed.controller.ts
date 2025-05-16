@@ -2,7 +2,6 @@ import { Response, NextFunction } from 'express';
 import { FeedService } from '../services/feed.service';
 import { FeedQuerySchema } from '../validators/feed.validator';
 import { AuthenticatedRequest } from '../middlewares/auth.middleware';
-import { Role } from '../../generated/prisma';
 import { ApiError } from '../utils/api-error';
 
 const feedService = new FeedService();
@@ -19,8 +18,8 @@ export class FeedController {
     try {
       const user = req.user;
 
-      if (!user || user.role !== Role.MEMBER) {
-        throw new ApiError('Only MEMBERS can access feed.', 403);
+      if (!user) {
+        throw new ApiError('Only platform members can access feed.', 403);
       }
 
       const { businessSlug } = req.params;
