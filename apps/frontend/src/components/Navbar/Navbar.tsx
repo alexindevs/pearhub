@@ -70,7 +70,7 @@ export const Navbar = () => {
                 {isBusinessOwner() && !businessLoading && business ? (
                   <>
                     <h4>{business.name}</h4>
-                    <p className="text-sm text-muted-foreground">@{business.slug}</p>
+                    <p className="text-sm text-muted-foreground cursor-pointer" onClick={() => router.push(`${business.slug}`)}>@{business.slug}</p>
                     <p className="text-sm text-muted-foreground pb-2">{authState.user?.role}</p>
                   </>
                 ) : (
