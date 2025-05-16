@@ -221,7 +221,7 @@ graph TD
 
 ## 👩🏾‍💻 Author
 
-Built by [**@alexindevs**](https://github.com/alexindevs) for the **Pearmonie Technical Assessment**, but architected to be a production‑ready creator platform. 🍐✨
+Built by [**@alexindevs**](https://github.com/alexindevs) for the [**Pearmonie Technical Assessment**](https://pearmonie.com), but architected to be a production‑ready creator platform. 🍐✨
 
 ---
 
