@@ -20,18 +20,6 @@ jobs:
         with:
           python-version: 3.12
 
-      - name: 🛠️ Install ranker deps
-        run: |
-          cd apps/recommender-engine
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: 🧪 Run tests (optional)
-        run: |
-          cd apps/recommender-engine
-          # Uncomment this if you add tests
-          # pytest
-
       - name: 📡 Deploy to server via SSH
         uses: appleboy/ssh-action@v1.2.2
         with:
