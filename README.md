@@ -55,7 +55,7 @@ Built to scale, PearHub blends a clean REST API, a modern Next.js frontend, and 
 
 ### 🧠 Feed Intelligence (V1)
 
-PearHub ships with a **hybrid recommendation pipeline**:
+PearHub shipped with a **hybrid recommendation pipeline**:
 
 1. **Cold‑start Popularity**
    `score = (views × 0.5) + (likes × 1.5) + (comments × 1.0) + (shares × 2.0)`
