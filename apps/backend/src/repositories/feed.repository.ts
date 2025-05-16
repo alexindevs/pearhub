@@ -38,6 +38,9 @@ export class FeedRepository {
   async getContentsByBusinessId(businessId: string): Promise<Content[]> {
     return this.prisma.content.findMany({
       where: { businessId },
+      orderBy: {
+        createdAt: 'desc',
+      },
       include: {
         // Include count of interaction types for popularity scoring
         _count: {

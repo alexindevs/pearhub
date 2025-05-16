@@ -22,7 +22,6 @@ function FeedPage() {
     9
   );
 
-  // Fetch business meta data
   useEffect(() => {
     if (typeof slug === 'string') {
       getBusinessMeta(slug)
