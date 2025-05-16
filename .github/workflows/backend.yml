@@ -1,4 +1,4 @@
-name: Build and Test (Node.js)
+name: Deploy Backend
 
 on:
   push:
@@ -42,7 +42,7 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd ${{ secrets.DEPLOY_PATH }}
+            cd ${{ secrets.BACKEND_DEPLOY_PATH }}
             git switch main
             git pull origin main
             docker compose -f docker/compose.yml down

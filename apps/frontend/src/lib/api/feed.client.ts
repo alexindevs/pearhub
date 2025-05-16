@@ -1,4 +1,3 @@
-// lib/api/feed.client.ts
 import axios from 'axios';
 
 const API = axios.create({

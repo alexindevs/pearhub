@@ -1,0 +1,46 @@
+name: Deploy Recommender Engine
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/recommender-engine/**'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v3
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: 🛠️ Install ranker deps
+        run: |
+          cd apps/recommender-engine
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 🧪 Run tests (optional)
+        run: |
+          cd apps/recommender-engine
+          # Uncomment this if you add tests
+          # pytest
+
+      - name: 📡 Deploy to server via SSH
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ${{ secrets.RANKER_DEPLOY_PATH }}
+            git switch main
+            git pull origin main
+            docker compose --env-file .env -f compose.yml down
+            docker compose --env-file .env -f compose.yml up --build -d
